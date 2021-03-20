@@ -29,7 +29,7 @@ The NeosRulez.Bootstrap.FusionLoopPagination package is listed on packagist (htt
 Just run:
 
 ```
-composer require neosrulez/bootstrap-formbuilder
+composer require neosrulez/fusionlooppagination
 ```
 
 
