@@ -1,0 +1,18 @@
+{
+  "description": "Neos.Fusion:Loop pagination",
+  "type": "neos-package",
+  "name": "neosrulez/fusionlooppagination",
+  "require": {
+    "neos/neos": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "NeosRulez\\FusionLoopPagination\\": "Classes/"
+    }
+  },
+  "extra": {
+    "neos": {
+      "package-key": "NeosRulez.FusionLoopPagination"
+    }
+  }
+}

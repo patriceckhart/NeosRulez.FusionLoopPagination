@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file original="" product-name="NeosRulez.FusionLoopPagination" source-language="de" datatype="plaintext">
+        <body>
+            <trans-unit id="content.prev" xml:space="preserve">
+				<source>Previous</source>
+			</trans-unit>
+            <trans-unit id="content.next" xml:space="preserve">
+				<source>Next</source>
+			</trans-unit>
+            <trans-unit id="content.first" xml:space="preserve">
+				<source>Start</source>
+			</trans-unit>
+            <trans-unit id="content.last" xml:space="preserve">
+				<source>End</source>
+			</trans-unit>
+        </body>
+    </file>
+</xliff>

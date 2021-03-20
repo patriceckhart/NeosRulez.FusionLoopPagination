@@ -1,0 +1,127 @@
+prototype(NeosRulez.FusionLoopPagination:Component.Paginated) < prototype(Neos.Fusion:Component) {
+    collection = 'required'
+    currentPage = ${request.arguments.currentPage || 1}
+    itemsTotalAmount = ${this.collection.count()}
+    itemsPerPage = 24
+    paginationMaxAmount = ${this.itemsPerPage}
+    needPagination = ${itemsTotalAmount > itemsPerPage ? true : false}
+
+    paginationClass = null
+    paginationId = null
+    paginationTop = false
+    paginationBottom = true
+    enableFirst = false
+    enableLast = false
+    enableArrows = true
+
+    paginatedItems = ${this.collection.slice((this.currentPage - 1) * this.itemsPerPage, this.currentPage * this.itemsPerPage)}
+    @context.paginatedItems = ${this.paginatedItems}
+
+    @context {
+        itemsTotalAmount = ${this.itemsTotalAmount}
+        itemsPerPage = ${this.itemsPerPage}
+        paginationMaxAmount = ${this.paginationMaxAmount}
+        paginationClass = ${this.paginationClass}
+        paginationId = ${this.paginationId}
+        enableFirst = ${this.enableFirst}
+        enableLast = ${this.enableLast}
+        enableArrows = ${this.enableArrows}
+    }
+    pagination = NeosRulez.Prototypes:Pagination {
+        currentPage = ${request.arguments.currentPage || 1}
+        itemsTotalAmount = ${itemsTotalAmount}
+        itemsPerPage = ${itemsPerPage}
+        paginationMaxAmount = ${paginationMaxAmount}
+        enableFirst = ${enableFirst}
+        enableLast = ${enableLast}
+        enableArrows = ${enableArrows}
+    }
+
+    renderer = afx`
+        <ul @if.show={props.paginationTop && props.needPagination} class={['pagination', 'paginationTop', props.paginationClass]} id={props.paginationId}>{props.pagination}</ul>
+            {props.content}
+        <ul @if.show={props.paginationBottom && props.needPagination} class={['pagination', 'paginationBottom', props.paginationClass]} id={props.paginationId}>{props.pagination}</ul>
+    `
+
+    @cache {
+        mode = 'cached'
+        entryIdentifier {
+            node = ${node}
+        }
+        entryDiscriminator = ${request.arguments.currentPage}
+        context {
+            1 = 'node'
+            2 = 'documentNode'
+            3 = 'site'
+        }
+    }
+}
+
+prototype(NeosRulez.Prototypes:PaginationArray) {
+    @class = 'NeosRulez\\FusionLoopPagination\\Fusion\\PaginationArrayImplementation'
+    itemsTotalAmount = ''
+    currentPage = ''
+    itemsPerPage = ''
+    paginationMaxAmount = ''
+    enableFirst = false
+    enableLast = false
+    enableArrows = true
+}
+
+prototype(NeosRulez.Prototypes:Pagination) < prototype(Neos.Fusion:Component) {
+    @context {
+        currentPage = ${this.currentPage}
+        itemsTotalAmount = ${this.itemsTotalAmount}
+        itemsPerPage = ${this.itemsPerPage}
+        paginationMaxAmount = ${this.paginationMaxAmount}
+        enableFirst = ${this.enableFirst}
+        enableLast = ${this.enableLast}
+        enableArrows = ${this.enableArrows}
+    }
+
+    paginationArray = NeosRulez.Prototypes:PaginationArray {
+        itemsTotalAmount = ${itemsTotalAmount}
+        currentPage = ${currentPage}
+        itemsPerPage = ${itemsPerPage}
+        paginationMaxAmount = ${paginationMaxAmount}
+        enableFirst = ${enableFirst}
+        enableLast = ${enableLast}
+        enableArrows = ${enableArrows}
+    }
+
+    renderer = afx`
+        <li @if.showFirst={props.paginationArray.first}>
+            <Neos.Neos:NodeLink node={documentNode} additionalParams={{'currentPage':props.paginationArray.first}} content={I18n.translate('NeosRulez.FusionLoopPagination:Main:content.first')} />
+        </li>
+
+        <li @if.showPrevious={props.paginationArray.previous}>
+            <Neos.Neos:NodeLink node={documentNode} additionalParams={{'currentPage':props.paginationArray.previous}} content={I18n.translate('NeosRulez.FusionLoopPagination:Main:content.prev')} />
+        </li>
+
+        <Neos.Fusion:Loop items={props.paginationArray.pagination} item="item">
+            <li class={item == props.paginationArray.raw.currentPage ? 'current' : 'normal'}>
+                <Neos.Neos:NodeLink @if.link={item!='...'} node={documentNode} additionalParams={{'currentPage':item}} content={item} />
+                <span @if.separator={item=='...'}>{item}</span>
+            </li>
+        </Neos.Fusion:Loop>
+
+        <li @if.showFirst={props.paginationArray.next}>
+            <Neos.Neos:NodeLink node={documentNode} additionalParams={{'currentPage':props.paginationArray.next}} content={I18n.translate('NeosRulez.FusionLoopPagination:Main:content.next')} />
+        </li>
+
+        <li @if.showLast={props.paginationArray.last}>
+            <Neos.Neos:NodeLink node={documentNode} additionalParams={{'currentPage':props.paginationArray.last}} content={I18n.translate('NeosRulez.FusionLoopPagination:Main:content.last')} />
+        </li>
+    `
+}
+
+prototype(Neos.Fusion:GlobalCacheIdentifiers) {
+    pagination = ${request.arguments.currentPage}
+}
+root.@cache.entryIdentifier.pagination = ${request.arguments.currentPage}
+prototype(Neos.Neos:Page) {
+    @cache.entryIdentifier.pagination = ${request.arguments.currentPage}
+}
+prototype(Neos.Neos:PrimaryContent).default {
+    renderer.@cache.entryIdentifier.pagination = ${request.arguments.currentPage}
+}

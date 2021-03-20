@@ -1,0 +1,14 @@
+Neos:
+  Flow:
+    mvc:
+      routes:
+        'NeosRulez.FusionLoopPagination': true
+  Neos:
+    fusion:
+      autoInclude:
+        NeosRulez.FusionLoopPagination: true
+    userInterface:
+      translation:
+        autoInclude:
+          NeosRulez.FusionLoopPagination:
+            - Main
